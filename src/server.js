@@ -15,6 +15,7 @@ class Server {
     }
 
     loadMiddlewares () {
+        // @todo: Add cors
         this.app.use(helmet());
         this.app.use(bodyParser.urlencoded({
             extended: true

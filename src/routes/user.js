@@ -1,5 +1,6 @@
 'use strict';
 
+const UserController = require('./../controllers/user');
 const { authenticate } = require('./../middlewares/authenticate');
 
 class UserRoute {
@@ -27,7 +28,27 @@ class UserRoute {
     }
 
     login (req, res) {
-        res.send('login');
+        // @todo: Add request body validation
+        const credentials = {
+            username: req.body.username,
+            password: req.body.password
+        };
+
+        new UserController.LoginController(credentials, this.config)
+            .process(function(error, result) {
+                if (error) {
+                    res.status(404);
+                    // @todo: Add error mapper
+                    res.send({
+                        error: {
+                            detail: 'User not found or unregistered'
+                        }
+                    });
+                }
+
+                // @todo: Add response mapper
+                res.send(result);
+            });
     }
 
     create (req, res) {
