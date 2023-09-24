@@ -23,3 +23,9 @@ $ npm run prisma:dev:initialize
 $ npm run dev
 ```
 
+## Setting Up with Docker
+*Todo*
+
+## Abbreviations Used
+- **DNU**: Do Not Use
+- **WIP**: Work In Progress
