@@ -1,0 +1,29 @@
+version: '3'
+services:
+  app:
+    image: greensense
+    container_name: greensense_api
+    ports:
+      - "50000:3000"
+    depends_on:
+      - greensense_mysql
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+    networks:
+      - greensense_net
+  mysql:
+    image: mysql:5.7
+    container_name: greensense_mysql
+    ports:
+      - "50001:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - greensense_net
+
+networks:
+  greensense_net:
+    driver: bridge
+
+volumes:
+  mysql_data:
