@@ -1,22 +1,23 @@
 'use strict';
 
+const express = require('express');
 const UserController = require('./../controllers/user');
 const { authenticate } = require('./../middlewares/authenticate');
 
 class UserRoute {
-    constructor (app, config) {
-        this.app = app;
+    constructor (config) {
         this.config = config;
 
+        this.router = express.Router();
         this.loadRoutes();
     }
 
     loadRoutes () {
-        this.app.get('/v1/users', authenticate, this.list);
-        this.app.get('/v1/users/:id', authenticate, this.find);
+        this.router.get('/v1/users', authenticate, this.list);
+        this.router.get('/v1/users/:id', authenticate, this.find);
 
-        this.app.post('/v1/login', authenticate, this.login);
-        this.app.post('/v1/user', authenticate, this.create);
+        this.router.post('/v1/login', authenticate, this.login);
+        this.router.post('/v1/user', authenticate, this.create);
     }
 
     list (req, res) {

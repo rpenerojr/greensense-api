@@ -28,7 +28,7 @@ class Server {
 
         files.forEach((routeFile) => {
             const Route = require(`../${routeFile}`);
-            new Route(this.app, this.config);
+            this.app.use((new Route(this.config)).router);
         });
     }
 

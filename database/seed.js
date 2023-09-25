@@ -14,7 +14,7 @@ async function main () {
 
         const password = hash;
 
-        const admin = await prisma.users.upsert({
+        await prisma.users.upsert({
             where: {
                 id: 1
             },
