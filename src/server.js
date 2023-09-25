@@ -4,6 +4,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const helmet = require('helmet');
 const { globSync } = require('glob')
+const cors = require('cors');
 
 class Server {
     constructor (config) {
@@ -15,7 +16,9 @@ class Server {
     }
 
     loadMiddlewares () {
-        // @todo: Add cors
+        this.app.use(cors({
+            origin: '*'
+        }));
         this.app.use(helmet());
         this.app.use(bodyParser.urlencoded({
             extended: true
