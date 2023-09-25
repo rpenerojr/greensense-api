@@ -1,7 +1,9 @@
 version: '3'
 services:
   app:
-    image: greensense
+    build:
+      context: .
+      dockerfile: ${DOCKERFILE}
     container_name: greensense_api
     ports:
       - "50000:3000"
@@ -11,9 +13,11 @@ services:
       DATABASE_URL: ${DATABASE_URL}
     networks:
       - greensense_net
-  mysql:
+  greensense_mysql:
     image: mysql:5.7
     container_name: greensense_mysql
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: true
     ports:
       - "50001:3306"
     volumes:

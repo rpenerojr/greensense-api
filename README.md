@@ -18,14 +18,22 @@ of the GreenSense system, covering both hardware and software requests
 
 ```shell
 $ git clone https://github.com/rpenerojr/greensense-api.git
-$ npm i
+$ npm install
 $ npm run prisma:dev:initialize
 $ npm run dev
 ```
 
 ## Setting Up with Docker
-*Todo*
 
-## Abbreviations Used
-- **DNU**: Do Not Use
-- **WIP**: Work In Progress
+- Install docker
+- Open the terminal and navigate to the project folder
+- Execute docker-compose up --build
+- Open an interactive terminal in the application
+- Execute prisma initialization
+
+```shell
+$ cd /path/to/project/folder
+$ docker-compose up --build
+$ docker exec -it greensense_api /bin/sh
+$ npm run prisma:dev:initialize
+```
