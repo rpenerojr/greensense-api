@@ -2,11 +2,12 @@
 
 const { PrismaClient } = require('@prisma/client');
 const bcrypt = require('bcrypt');
+const saltRounds = 10;
 
 const prisma = new PrismaClient();
 
 async function main () {
-    bcrypt.hash('admin', 10, async function (error, hash) {
+    bcrypt.hash('admin', saltRounds, async function (error, hash) {
         if (error) {
             throw new Error('An error occured while hashing the password');
         }
