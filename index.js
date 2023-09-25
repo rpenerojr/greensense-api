@@ -8,6 +8,7 @@ let server;
 process.on('SIGTERM', function () {
     if (server) {
         server.close();
+        process.exit(1);
     }
 });
 
