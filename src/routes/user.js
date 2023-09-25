@@ -4,7 +4,7 @@ const express = require('express');
 const UserController = require('./../controllers/user');
 const { authenticate } = require('./../middlewares/authenticate');
 const validate = require('./../validators/validate');
-const ErrorMapper = require('../mappers/errors');
+const Mapper = require('../mappers');
 
 const loginSchema = require('./../validators/users/login-credentials.json');
 
@@ -18,17 +18,23 @@ class UserRoute {
 
     loadRoutes () {
         this.router.get('/v1/users', authenticate, this.list);
-        this.router.get('/v1/user/:id', authenticate, this.find);
+        this.router.get('/v1/user/:id', authenticate, this.get);
         this.router.post('/v1/login', authenticate, this.login);
         this.router.post('/v1/user', authenticate, this.create);
     }
 
-    list (req, res) {
-        res.send('get all users');
+    list (_req, res) {
+        new UserController.ListController().process(function (_error, result) {
+            res.send(Mapper.response.resourceMapper(result));
+        });
     }
 
-    find (req, res) {
-        res.send('find a user');
+    get (req, res) {
+        new UserController.GetController({
+            id: parseInt(req.params.id)
+        }).process(function (_error, result) {
+            res.send(Mapper.response.resourceMapper(result));
+        });
     }
 
     login (req, res) {
@@ -41,7 +47,7 @@ class UserRoute {
 
         if (typeof(isPayloadValid) === 'object') {
             res.status(400);
-            return res.send(ErrorMapper.requestPayloadErrorMapper(isPayloadValid));
+            return res.send(Mapper.error.requestPayloadErrorMapper(isPayloadValid));
         }
 
         new UserController.LoginController(credentials, this.config);
