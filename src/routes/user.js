@@ -4,7 +4,7 @@ const express = require('express');
 const UserController = require('./../controllers/user');
 const { authenticate } = require('./../middlewares/authenticate');
 const validate = require('./../validators/validate');
-const ErrorMapper = require('./../mappers');
+const ErrorMapper = require('../mappers/errors');
 
 const loginSchema = require('./../validators/users/login-credentials.json');
 
@@ -44,21 +44,7 @@ class UserRoute {
             return res.send(ErrorMapper.requestPayloadErrorMapper(isPayloadValid));
         }
 
-        new UserController.LoginController(credentials, this.config)
-            .process(function(error, result) {
-                if (error) {
-                    res.status(404);
-                    // @todo: Add error mapper
-                    res.send({
-                        error: {
-                            detail: 'User not found or unregistered'
-                        }
-                    });
-                }
-
-                // @todo: Add response mapper
-                res.send(result);
-            });
+        new UserController.LoginController(credentials, this.config);
     }
 
     create (req, res) {
