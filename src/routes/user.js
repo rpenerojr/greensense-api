@@ -3,6 +3,10 @@
 const express = require('express');
 const UserController = require('./../controllers/user');
 const { authenticate } = require('./../middlewares/authenticate');
+const validate = require('./../validators/validate');
+const ErrorMapper = require('./../mappers');
+
+const loginSchema = require('./../validators/users/login-credentials.json');
 
 class UserRoute {
     constructor (config) {
@@ -14,8 +18,7 @@ class UserRoute {
 
     loadRoutes () {
         this.router.get('/v1/users', authenticate, this.list);
-        this.router.get('/v1/users/:id', authenticate, this.find);
-
+        this.router.get('/v1/user/:id', authenticate, this.find);
         this.router.post('/v1/login', authenticate, this.login);
         this.router.post('/v1/user', authenticate, this.create);
     }
@@ -29,11 +32,17 @@ class UserRoute {
     }
 
     login (req, res) {
-        // @todo: Add request body validation
         const credentials = {
             username: req.body.username,
             password: req.body.password
         };
+
+        const isPayloadValid = validate(credentials, loginSchema);
+
+        if (typeof(isPayloadValid) === 'object') {
+            res.status(400);
+            return res.send(ErrorMapper.requestPayloadErrorMapper(isPayloadValid));
+        }
 
         new UserController.LoginController(credentials, this.config)
             .process(function(error, result) {
