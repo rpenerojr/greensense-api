@@ -1,10 +1,10 @@
 'use strict';
 
 const express = require('express');
-const UserController = require('./../controllers/user');
+const UserController = require('./../controllers/users');
 const { authenticate } = require('./../middlewares/authenticate');
 const validate = require('./../validators/validate');
-const Mapper = require('../mappers');
+const UserMapper = require('../mappers/user-mapper');
 
 const loginSchema = require('./../validators/users/login-credentials.json');
 
@@ -18,14 +18,14 @@ class UserRoute {
 
     loadRoutes () {
         this.router.get('/v1/users', authenticate, this.list);
-        this.router.get('/v1/user/:id', authenticate, this.get);
+        this.router.get('/v1/users/:id', authenticate, this.get);
         this.router.post('/v1/login', authenticate, this.login);
-        this.router.post('/v1/user', authenticate, this.create);
+        this.router.post('/v1/users', authenticate, this.create);
     }
 
     list (_req, res) {
         new UserController.ListController().process(function (_error, result) {
-            res.send(Mapper.response.resourceMapper(result));
+            res.send((new UserMapper(result)).map());
         });
     }
 
@@ -33,24 +33,33 @@ class UserRoute {
         new UserController.GetController({
             id: parseInt(req.params.id)
         }).process(function (_error, result) {
-            res.send(Mapper.response.resourceMapper(result));
+            res.send((new UserMapper(result)).map());
         });
     }
 
     login (req, res) {
         const credentials = {
-            username: req.body.username,
-            password: req.body.password
+            email: req.body.email,
+            password: req.body.password,
+            privilege: req.body.privilege
         };
 
         const isPayloadValid = validate(credentials, loginSchema);
 
         if (typeof(isPayloadValid) === 'object') {
             res.status(400);
-            return res.send(Mapper.error.requestPayloadErrorMapper(isPayloadValid));
+            return res.send(new Error('InvalidPayloadError'));
         }
 
-        new UserController.LoginController(credentials, this.config);
+        new UserController.LoginController(credentials)
+            .process(function(error, result) {
+                if (error) {
+                    res.status(400);
+                    return res.send(new Error('InvalidCredentialError'));
+                }
+
+                res.send(result)
+            });
     }
 
     create (req, res) {
