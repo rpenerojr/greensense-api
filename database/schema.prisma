@@ -14,20 +14,39 @@ enum Privilege {
 
 model Users {
   id Int @id @default(autoincrement())
-  firstName String
-  lastName String
+  firstName String?
+  lastName String?
   privilege Privilege @default(user)
   email String
   password String
   isActive Boolean @default(true)
+  isVerified Boolean @default(false)
+  verificationCode String
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
+  system Systems?
+  systemUsers SystemUsers?
+}
+
+model Systems {
+  id Int @id @default(autoincrement())
+  userId Int @unique
+  systemUsers SystemUsers[]
+  systemCreator Users @relation(fields: [userId], references: [id])
   products Products[]
+}
+
+model SystemUsers {
+  id Int @id @default(autoincrement())
+  systemId Int
+  system Systems @relation(fields: [systemId], references: [id])
+  userId Int @unique
+  users Users @relation(fields: [userId], references: [id])
 }
 
 model Products {
   id Int @id @default(autoincrement())
-  userId Int
+  systemId Int
   name String
   allowance Int @default(2)
   temperatureMin Float
@@ -44,13 +63,18 @@ model Products {
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
   records Records[]
-  user Users @relation(fields: [userId], references: [id])
+  system Systems @relation(fields: [systemId], references: [id])
 }
 
 model Records {
   id Int @id @default(autoincrement())
   productId Int
-  recordedAt DateTime @default(now())
+  temperature Float
+  humidity Float
+  co2 Float
+  light Float
+  moisture Float
+  createdAt DateTime @default(now())
   product Products @relation(fields: [productId], references: [id])
 }
 
