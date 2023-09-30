@@ -4,10 +4,14 @@
 
 const {
     NODE_ENV,
-    PORT
+    PORT,
+    TOKEN_EXPIRATION
 } = process.env
 
 module.exports = {
     nodeEnv: NODE_ENV || 'development',
-    port: PORT || 3000
+    port: PORT || 3000,
+    auth: {
+        expiresIn: TOKEN_EXPIRATION
+    }
 }
