@@ -5,6 +5,7 @@ CREATE TABLE `Users` (
     `lastName` VARCHAR(191) NULL,
     `privilege` ENUM('user', 'admin') NOT NULL DEFAULT 'user',
     `email` VARCHAR(191) NOT NULL,
+    `phoneNumber` VARCHAR(191) NOT NULL,
     `password` VARCHAR(191) NOT NULL,
     `isActive` BOOLEAN NOT NULL DEFAULT true,
     `isVerified` BOOLEAN NOT NULL DEFAULT false,

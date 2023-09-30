@@ -23,6 +23,7 @@ async function main () {
                 email: 'admin@greensense.com',
                 firstName: 'Super',
                 lastName: 'Admin',
+                phoneNumber: '+639000000000',
                 password,
                 privilege: 'admin',
                 isVerified: true,

@@ -18,6 +18,7 @@ model Users {
   lastName String?
   privilege Privilege @default(user)
   email String
+  phoneNumber String
   password String
   isActive Boolean @default(true)
   isVerified Boolean @default(false)

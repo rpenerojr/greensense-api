@@ -7,7 +7,9 @@ class AjvValidationErrorMapper{
 
     map() {
         const validationError = this.ajvValidation.errors[0];
-        const pointer = validationError.params.missingProperty || '';
+
+        const pointer = validationError.params.missingProperty ||
+                            validationError.instancePath || '';
 
         return {
             error: {

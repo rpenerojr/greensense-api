@@ -9,7 +9,7 @@ exports.authenticate = function (req, res, next) {
         return res.send((new ForbiddenErrorMapper()).map());
     }
 
-    const token = req.headers.authorization.split(" ")[1];
+    const token = req.headers.authorization.split(' ')[1];
     const decodedToken = jwt.decode(token);
 
     req.requester = {
