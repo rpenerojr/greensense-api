@@ -24,7 +24,9 @@ async function main () {
                 firstName: 'Super',
                 lastName: 'Admin',
                 password,
-                privilege: 'admin'
+                privilege: 'admin',
+                isVerified: true,
+                verificationCode: 'seedValue'
             }
         });
     });
