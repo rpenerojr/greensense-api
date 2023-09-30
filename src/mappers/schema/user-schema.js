@@ -6,6 +6,7 @@ module.exports = {
     email: 'email',
     image: 'image',
     isActive: 'isActive',
+    isVerified: 'isVerified',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
 }

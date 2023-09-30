@@ -19,7 +19,9 @@ class LoginController {
         const user = await this.prisma.users.findFirst({
             where: {
                 email: this.params.email,
-                privilege: this.params.privilege
+                privilege: this.params.privilege,
+                isActive: true,
+                isVerified: true
             }
         });
 
