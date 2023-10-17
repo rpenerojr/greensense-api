@@ -1,12 +1,12 @@
 'use strict';
 
-const ForbiddenErrorMapper = require('./../mappers/errors/forbidden-error-mapper');
+const ForbiddenError = require('../errors/forbidden-error');
 const jwt = require('jsonwebtoken');
 
 exports.authenticate = function (req, res, next) {
     if (!req.headers.authorization) {
         res.status(403);
-        return res.send((new ForbiddenErrorMapper()).map());
+        return res.send(new ForbiddenError().map());
     }
 
     const token = req.headers.authorization.split(' ')[1];

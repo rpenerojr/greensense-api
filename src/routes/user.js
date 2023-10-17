@@ -4,10 +4,12 @@ const express = require('express');
 const UserController = require('./../controllers/users');
 const { authenticate } = require('./../middlewares/authenticate');
 const validate = require('./../validators/validate');
+
 const UserMapper = require('../mappers/user-mapper');
 const AuthMapper = require('../mappers/auth-mapper');
-const AjvValidationErrorMapper = require('../mappers/errors/ajv-validation-error-mapper');
-const UnauthorizedErrorMapper = require('../mappers/errors/unauthorized-error-mapper');
+
+const AjvValidationError = require('../errors/ajv-validation-error');
+const UnauthorizedError = require('../errors/unauthorized-error');
 
 const loginSchema = require('../validators/schema/users/login-credentials');
 const createSchema = require('../validators/schema/users/create');
@@ -52,14 +54,14 @@ class UserRoute {
 
         if (!validation.isValid) {
             res.status(400);
-            return res.send((new AjvValidationErrorMapper(validation)).map());
+            return res.send(new AjvValidationError(validation).map());
         }
 
         new UserController.LoginController(credentials)
             .process(function(error, result) {
                 if (error) {
                     res.status(401);
-                    return res.send((new UnauthorizedErrorMapper()).map());
+                    return res.send(new UnauthorizedError().map());
                 }
 
                 res.send((new AuthMapper(result)).map())
@@ -81,7 +83,7 @@ class UserRoute {
         if (!validation.isValid) {
             res.status(400);
 
-            return res.send((new AjvValidationErrorMapper(validation)).map());
+            return res.send(new AjvValidationError(validation).map());
         }
 
         res.send('create user');
